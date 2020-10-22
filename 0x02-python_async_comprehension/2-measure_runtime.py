@@ -6,9 +6,9 @@ from time import perf_counter
 async_comp = __import__('1-async_comprehension').async_comprehension
 
 
-async measure_runtime() -> float:
+async def measure_runtime() -> float:
     """function that execute async_comprehesion four times in parallel
        using asyncio.gather"""
     start = perf_counter()
-    a = await asyncio.gather(*(async_comp() for _ in range(4)))
-    return a
+    await asyncio.gather(*(async_comp() for _ in range(4)))
+    return perf_counter() - start
