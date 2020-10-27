@@ -6,6 +6,7 @@ from base_caching import BaseCaching
 class LRUCache(BaseCaching):
     """LRU cache"""
     def __init__(self):
+        """Initialization"""
         super().__init__()
         self.keys = []
 
