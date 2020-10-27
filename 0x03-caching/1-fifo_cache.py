@@ -1,20 +1,21 @@
 #!/usr/bin/python3
-""" FIFO caching """
+""" Get and retrieve items using FIFO caching """
 from base_caching import BaseCaching
 
 
 class FIFOCache(BaseCaching):
-    """ """
+    """FIFO cache"""
     def __init__(self):
         super().__init__()
         self.keys = []
 
     def put(self, key, item):
+        """add data to the cache"""
         if key is None or item is None:
             return
         if key in self.keys:
             self.keys.remove(key)
-        elif len(self.cache_data) >= BaseCaching.MAX_ITEMS:
+        elif len(self.cache_data) >= self.MAX_ITEMS:
             discard = self.keys.pop(0)
             print("DISCARD: {}".format(discard))
             del self.cache_data[discard]
