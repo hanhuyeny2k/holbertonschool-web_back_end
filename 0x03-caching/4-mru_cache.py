@@ -6,7 +6,8 @@ from base_caching import BaseCaching
 
 
 class MRUCache(BaseCaching):
-    """MRU cache"""
+    """MRU cache !!!"""
+
     def __init__(self):
         """Initialization"""
         super().__init__()
