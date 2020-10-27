@@ -1,5 +1,7 @@
 #!/usr/bin/python3
-""" Get and retrieve items using LRU caching """
+"""
+Get and retrieve items using LRU caching
+"""
 from base_caching import BaseCaching
 
 
