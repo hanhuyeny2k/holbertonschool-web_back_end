@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Connect to secure database
+Read and filter data
 """
 from typing import List
 import re
@@ -61,3 +61,22 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
         host=host,
         database=name)
     return connection
+
+
+def main():
+    """Print out contents of a database"""
+    cnx = get_db()
+    cursor = cnx.cursor()
+    cursor.execute('SELECT * FROM users;')
+    fields = PII_FIELDS + ("ip", "last_login", "user_agent")
+    logger = get_logger()
+    for row in cursor:
+        msg = "; ".join(
+            f'{fields[i]}={row[i]}' for i in range(len(fields))) + ';'
+        logger.log(logging.INFO, msg)
+    cursor.close()
+    cnx.close()
+
+
+if __name__ == '__main__':
+    main()
