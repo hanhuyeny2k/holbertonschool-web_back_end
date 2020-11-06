@@ -6,7 +6,6 @@ from typing import List, TypeVar
 
 class Auth:
     """manage API authentication"""
-    
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
         """define which routes don't need authentication"""
         if path is None:
@@ -19,11 +18,13 @@ class Auth:
             elif i in {path, path + '/'}:
                 return False
         return True
-    
+
     def authorization_header(self, request=None) -> str:
-        """return None"""
-        return None
-    
+        """request validation"""
+        if request is None:
+            return None
+        return request.header.get('Authorization')
+
     def current_user(self, request=None) -> TypeVar('User'):
         """return None"""
         return None
