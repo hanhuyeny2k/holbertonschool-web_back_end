@@ -8,9 +8,7 @@ class Auth:
     """manage API authentication"""
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
         """define which routes don't need authentication"""
-        if path is None:
-            return True
-        if excluded_paths is None:
+        if path is None or not excluded_paths:
             return True
         for i in excluded_paths:
             if i.endswith('*') and path.startswith(i[:-1]):
@@ -23,7 +21,7 @@ class Auth:
         """request validation"""
         if request is None:
             return None
-        return request.header.get('Authorization')
+        return request.headers.get('Authorization')
 
     def current_user(self, request=None) -> TypeVar('User'):
         """return None"""
