@@ -29,10 +29,12 @@ def before_req():
     """filter request"""
     if auth is None:
         return
-    p_list = ['/api/v1/status/', '/api/v1/unauthorized/', '/api/v1/forbidden/']
+    p_list = ['/api/v1/status/', '/api/v1/unauthorized/', '/api/v1/forbidden/',
+              '/api/v1/auth_session/login/']
     if not auth.require_auth(request.path, p_list):
-            return
-    if auth.authorization_header(request) is None:
+        return
+    if (not auth.authorization_header(request) and
+            not auth.session_cookie(request)):
         abort(401)
     request.current_user = auth.current_user(request)
     if request.current_user is None:
