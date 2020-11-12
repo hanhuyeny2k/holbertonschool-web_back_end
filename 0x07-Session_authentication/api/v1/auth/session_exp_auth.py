@@ -2,7 +2,9 @@
 """
 SessionExpAuth class to manage API authentication
 """
-import SessionAuth from auth
+from api.v1.auth.session_auth import SessionAuth
+from os import getenv
+from datetime import datetime, timedelta
 
 
 class SessionExpAuth:
