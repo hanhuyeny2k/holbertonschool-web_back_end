@@ -16,6 +16,7 @@ class DB:
     args_list = ['id', 'email', 'hashed_password', 'session_id', 'reset_token']
 
     def __init__(self):
+        """initialization"""
         self._engine = create_engine("sqlite:///a.db", echo=False)
         Base.metadata.drop_all(self._engine)
         Base.metadata.create_all(self._engine)
@@ -48,3 +49,11 @@ class DB:
             raise NoResultFound
         return user
 
+    def update_user(self, user_id: int, **user_table) -> None:
+        """take in user_id as return None"""
+        user = self.find_user_by(id=user_id)
+        for key, value in user_table.items():
+            if key not in self.args_list:
+                raise ValueError
+            setattr(user, key, value)
+        self._session.commit()
