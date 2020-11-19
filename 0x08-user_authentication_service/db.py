@@ -2,6 +2,8 @@
 """
 SQLAlchemy model DB
 """
+from sqlalchemy.exc import InvalidRequestError
+from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
@@ -14,7 +16,7 @@ class DB:
     args_list = ['id', 'email', 'hashed_password', 'session_id', 'reset_token']
 
     def __init__(self):
-        self._engine = create_engine("sqlite:///a.db", echo=True)
+        self._engine = create_engine("sqlite:///a.db", echo=False)
         Base.metadata.drop_all(self._engine)
         Base.metadata.create_all(self._engine)
         self.__session = None
@@ -33,3 +35,16 @@ class DB:
         self._session.add(user)
         self._session.commit()
         return user
+
+    def find_user_by(self, **user_table) -> User:
+        """return the first row found in the users table"""
+        if not user_table:
+            raise InvalidRequestError
+        for arg in user_table:
+            if arg not in self.args_list:
+                raise InvalidRequestError
+        user = self._session.query(User).filter_by(**user_table).first()
+        if not user:
+            raise NoResultFound
+        return user
+
