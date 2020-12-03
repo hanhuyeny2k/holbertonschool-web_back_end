@@ -8,7 +8,7 @@ app.url_map.strict_slashes = False
 babel = Babel(app)
 
 
-@app.route('/')
+@app.route('/', methods=['GET'])
 def home() -> str:
     """Route for index page"""
     return render_template('4-index.html')
