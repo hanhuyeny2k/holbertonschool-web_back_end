@@ -49,6 +49,7 @@ def count_calls(method: Callable) -> Callable:
         return method(self, *args, **kwargs)
     return wrapper
 
+
 def call_history(method: Callable) -> Callable:
     """Store Cache method inputs and outputs"""
     qualname = method.__qualname__
@@ -63,6 +64,7 @@ def call_history(method: Callable) -> Callable:
         self._redis.rpush(o, str(result))
         return result
     return wrapper
+
 
 def replay(method: Callable):
     """Replay decorated method history"""
