@@ -48,3 +48,18 @@ def count_calls(method: Callable) -> Callable:
         self._redis.incr(qualname)
         return method(self, *args, **kwargs)
     return wrapper
+
+def call_history(method: Callable) -> Callable:
+    """Store Cache method inputs and outputs"""
+    qualname = method.__qualname__
+    i = qualname + ":inputs"
+    o = qualname + ":outputs"
+
+    @wraps(method)
+    def wrapper(self, *args, **kwargs):
+        """Wrapper function"""
+        self._redis.rpush(i, str(args))
+        result = method(self, *args, **kwargs)
+        self._redis.rpush(o, str(result))
+        return result
+    return wrapper
