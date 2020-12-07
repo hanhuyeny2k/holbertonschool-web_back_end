@@ -63,3 +63,17 @@ def call_history(method: Callable) -> Callable:
         self._redis.rpush(o, str(result))
         return result
     return wrapper
+
+def replay(method: Callable):
+    """Replay decorated method history"""
+    qualname = method.__qualname__
+    i = qualname + ":inputs"
+    o = qualname + ":outputs"
+    inst = method.__self__
+    count = inst.get(qualname)
+    print(f"{qualname} was called {count.decode('utf-8')} times:")
+
+    inputs = inst._redis.lrange(i, 0, -1)
+    outputs = inst._redis.lrange(o, 0, -1)
+    for k, v, in zip(inputs, outputs):
+        print(f"{qualname}(*{k.decode('utf-8')}) -> {v.decode('utf-8')}")
