@@ -36,3 +36,15 @@ class Cache:
     def get_int(self, key: str) -> int:
         """get an int"""
         return self.get(key, int)
+
+
+def count_calls(method: Callable) -> Callable:
+    """Count calls of Cache methods"""
+    qualname = method.__qualname__
+
+    @wraps(method)
+    def wrapper(self, *args, **kwargs):
+        """Wrapper function"""
+        self._redis.incr(qualname)
+        return method(self, *args, **kwargs)
+    return wrapper
