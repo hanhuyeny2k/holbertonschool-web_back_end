@@ -2,13 +2,12 @@
 """Redis Caching"""
 from functools import wraps
 from typing import Callable, Optional, Union
-from uuid import uuid4
-from redis.client import Redis
+import uuid4
+import redis
 
 
 class Cache:
     """Redis Cache"""
-
     def __init__(self):
         """Redis cache wrapper"""
         self._redis = Redis()
@@ -74,7 +73,6 @@ def replay(method: Callable):
     inst = method.__self__
     count = inst.get(qualname)
     print(f"{qualname} was called {count.decode('utf-8')} times:")
-
     inputs = inst._redis.lrange(i, 0, -1)
     outputs = inst._redis.lrange(o, 0, -1)
     for k, v, in zip(inputs, outputs):
